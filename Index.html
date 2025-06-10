@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة الرصيد الذكية</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    h1 {
+      color: #64dfdf;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      animation: slideDown 1s ease-out;
+    }
+
+    .card, .choice-card {
+      background: linear-gradient(145deg, #2a2a40, #1a1a2e);
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(100, 223, 223, 0.2);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      width: 80%;
+      max-width: 300px;
+      transition: 0.3s;
+    }
+
+    input {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #7b2cbf;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4ea8de;
+    }
+
+    .result {
+      font-size: 20px;
+      color: #b9fbc0;
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 حاسبة الرصيد الذكية</h1>
+
+    <div class="choice-card" id="choiceCard">
+      <p>اختار نوع الحساب اللي عايزه:</p>
+      <button onclick="showCard('toPay')">أنا عايز أعرف هدفع كام</button>
+      <button onclick="showCard('toGet')">أنا دفعت وعايز أعرف هيوصلني كام</button>
+    </div>
+
+    <div class="card hidden" id="toPayCard">
+      <h2>لو عايز رصيد يوصل لك:</h2>
+      <input type="number" id="amountWanted" placeholder="أدخل الرصيد بالجنيه">
+      <button onclick="calculateToPay()">احسب المبلغ</button>
+      <div class="result" id="resultToPay"></div>
+      <button onclick="switchCard('get')">⬅️ عايز أحسب العكس</button>
+    </div>
+
+    <div class="card hidden" id="toGetCard">
+      <h2>لو دفعت مبلغ:</h2>
+      <input type="number" id="amountPaid" placeholder="أدخل المبلغ اللي هتدفعه">
+      <button onclick="calculateBalance()">احسب الرصيد</button>
+      <div class="result" id="resultBalance"></div>
+      <button onclick="switchCard('pay')">⬅️ عايز أحسب العكس</button>
+    </div>
+
+  </div>
+
+  <script>
+    function showCard(type) {
+      document.getElementById("choiceCard").classList.add("hidden");
+      if (type === 'toPay') {
+        document.getElementById("toPayCard").classList.remove("hidden");
+      } else {
+        document.getElementById("toGetCard").classList.remove("hidden");
+      }
+    }
+
+    function switchCard(to) {
+      document.getElementById("toPayCard").classList.add("hidden");
+      document.getElementById("toGetCard").classList.add("hidden");
+      if (to === 'pay') {
+        document.getElementById("toPayCard").classList.remove("hidden");
+      } else {
+        document.getElementById("toGetCard").classList.remove("hidden");
+      }
+    }
+
+    function calculateToPay() {
+      const amount = parseFloat(document.getElementById('amountWanted').value);
+      if (isNaN(amount) || amount <= 0) {
+        document.getElementById('resultToPay').innerText = "اكتب رقم صحيح.";
+        return;
+      }
+      const toPay = (amount / 0.7).toFixed(2);
+      document.getElementById('resultToPay').innerText = `لازم تدفع: ${toPay} جنيه`;
+    }
+
+    function calculateBalance() {
+      const paid = parseFloat(document.getElementById('amountPaid').value);
+      if (isNaN(paid) || paid <= 0) {
+        document.getElementById('resultBalance').innerText = "اكتب رقم صحيح.";
+        return;
+      }
+      const balance = (paid * 0.7).toFixed(2);
+      document.getElementById('resultBalance').innerText = `هيوصلك رصيد: ${balance} جنيه`;
+    }
+  </script>
+</body>
+</html>
